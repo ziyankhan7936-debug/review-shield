@@ -6,12 +6,8 @@
 <title>Rate Your Experience</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --theme:#3B82F6;
-  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-}
+:root{ --theme:#3B82F6; --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
 html{font-size:16px}
 body{
   font-family:var(--font);
@@ -22,21 +18,21 @@ body{
   justify-content:center;
   -webkit-font-smoothing:antialiased;
 }
-@media(min-width:480px){
-  body{align-items:center;padding:32px 16px}
-}
+@media(min-width:480px){body{align-items:center;padding:32px 16px}}
 
-/* ── CARD ── */
+/* CARD */
 .card{
   width:100%;max-width:440px;
   background:#fff;
   border-radius:0 0 20px 20px;
   box-shadow:0 4px 30px rgba(0,0,0,.12);
   overflow:hidden;
+  /* Allow card to scroll naturally */
+  padding-bottom:80px;
 }
-@media(min-width:480px){.card{border-radius:20px}}
+@media(min-width:480px){.card{border-radius:20px;padding-bottom:0}}
 
-/* ── HEADER ── */
+/* HEADER */
 .hdr{
   background:var(--theme);
   padding:34px 22px 26px;
@@ -53,18 +49,19 @@ body{
   -webkit-tap-highlight-color:transparent;
 }
 .biz-ico{
-  font-size:36px;line-height:1;
+  font-size:34px;
   width:68px;height:68px;
   background:rgba(255,255,255,.95);
   border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   margin:0 auto 12px;
   box-shadow:0 4px 14px rgba(0,0,0,.15);
+  overflow:hidden;
 }
 .biz-name{font-size:21px;font-weight:800;color:#fff;margin-bottom:5px;line-height:1.25}
 .biz-sub{font-size:13px;color:rgba(255,255,255,.88)}
 
-/* ── STARS ── */
+/* STARS */
 .star-sec{padding:28px 22px 22px;text-align:center}
 .star-q{font-size:18px;font-weight:700;color:#1F2937;margin-bottom:22px;line-height:1.4}
 .stars{display:flex;justify-content:center;gap:6px;margin-bottom:12px}
@@ -80,38 +77,34 @@ body{
 .rate-word{font-size:15px;font-weight:600;color:#9CA3AF;height:24px;transition:color .2s}
 .rate-word.active{color:#374151}
 
-/* ── DIVIDER ── */
+/* DIVIDER */
 .divider{height:1px;background:#F3F4F6;margin:0 20px}
 
-/* ── SECTIONS — hidden/shown purely via class ── */
-.section{padding:22px 20px}
+/* SECTIONS */
+.section{padding:20px 18px}
 .section.hidden{display:none}
 
-/* ── INFO CARDS ── */
-.info{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;margin-bottom:20px}
+/* INFO CARDS */
+.info{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;margin-bottom:18px}
 .info.pos{background:#F0FDF4;border:1.5px solid #BBF7D0}
 .info.neg{background:#FEF2F2;border:1.5px solid #FECACA}
-.info-ico{
-  width:46px;height:46px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;flex-shrink:0;
-}
+.info-ico{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .pos .info-ico{background:#DCFCE7}
 .neg .info-ico{background:#FEE2E2}
-.info-title{font-size:17px;font-weight:800;color:#111827}
-.info-sub{font-size:13px;color:#4B5563;margin-top:3px;line-height:1.45}
+.info-title{font-size:16px;font-weight:800;color:#111827}
+.info-sub{font-size:12px;color:#4B5563;margin-top:3px;line-height:1.45}
 
-/* ── SECTION LABEL ── */
-.sec-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9CA3AF;margin-bottom:10px}
+/* LABELS */
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9CA3AF;margin-bottom:8px}
 
-/* ── CHIPS ── */
-.chips{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+/* CHIPS */
+.chips{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 .chip{
   display:flex;align-items:center;gap:10px;
-  padding:13px 14px;border:1.5px solid #E5E7EB;
+  padding:12px 14px;border:1.5px solid #E5E7EB;
   border-radius:12px;background:#fff;
   font-size:14px;font-weight:500;color:#374151;
-  cursor:pointer;text-align:left;min-height:52px;
+  cursor:pointer;text-align:left;min-height:50px;
   width:100%;
   -webkit-tap-highlight-color:transparent;
   transition:border-color .18s,background .18s;
@@ -122,11 +115,11 @@ body{
 .chip-chk{color:#3B82F6;opacity:0;transition:opacity .2s;font-size:15px}
 .chip.done .chip-chk{opacity:1}
 
-/* ── TOAST ── */
-.toast{text-align:center;font-size:13px;font-weight:600;color:#10B981;height:20px;margin-bottom:12px;opacity:0;transition:opacity .3s}
+/* TOAST */
+.toast{text-align:center;font-size:13px;font-weight:600;color:#10B981;height:20px;margin-bottom:10px;opacity:0;transition:opacity .3s}
 .toast.show{opacity:1}
 
-/* ── BUTTONS ── */
+/* BUTTONS */
 .btn{
   display:flex;align-items:center;justify-content:center;gap:10px;
   width:100%;padding:16px 20px;
@@ -141,31 +134,43 @@ body{
 .btn-s{background:#1F2937;color:#fff}
 .btn i{font-size:18px}
 
-/* ── TAGS ── */
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+/* STICKY SUBMIT BUTTON — mobile only */
+.sticky-submit{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  padding:12px 18px 20px;
+  background:linear-gradient(to top, #fff 70%, transparent);
+  z-index:50;
+  display:none;
+}
+.sticky-submit.show{display:block}
+@media(min-width:480px){.sticky-submit{display:none!important}}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .tag{
-  padding:9px 16px;border:1.5px solid #E5E7EB;
+  padding:8px 14px;border:1.5px solid #E5E7EB;
   border-radius:50px;background:#fff;
   font-size:13px;font-weight:600;color:#374151;
-  cursor:pointer;min-height:40px;display:flex;align-items:center;
+  cursor:pointer;min-height:38px;display:flex;align-items:center;
   -webkit-tap-highlight-color:transparent;
   transition:all .18s;
 }
 .tag:active{transform:scale(.95)}
 .tag.on{background:#1F2937;border-color:#1F2937;color:#fff}
 
-/* ── FIELDS ── */
+/* FIELD */
 .field{margin-bottom:12px}
 .field label{display:block;font-size:12px;font-weight:600;color:#4B5563;margin-bottom:5px}
-.field input,.field textarea{
+.field textarea{
   width:100%;padding:12px 14px;
   border:1.5px solid #E5E7EB;border-radius:10px;
   font-size:14px;font-family:var(--font);color:#1F2937;
   outline:none;transition:border-color .2s;resize:none;
 }
-.field input:focus,.field textarea:focus{border-color:var(--theme)}
+.field textarea:focus{border-color:var(--theme)}
 
-/* ── OVERLAYS ── */
+/* OVERLAYS */
 .ov{
   position:absolute;inset:0;
   background:rgba(255,255,255,.96);
@@ -186,7 +191,7 @@ body{
 .ov-title{font-size:22px;font-weight:800;color:#111827;margin-bottom:10px}
 .ov-msg{font-size:14px;color:#4B5563;line-height:1.65}
 
-/* ── FOOTER ── */
+/* FOOTER */
 .footer{text-align:center;font-size:11px;color:#9CA3AF;padding:12px 0 16px;border-top:1px solid #F3F4F6}
 </style>
 </head>
@@ -216,7 +221,7 @@ body{
 
   <div class="divider" id="dvd" style="display:none"></div>
 
-  <!-- POSITIVE SECTION (4-5 stars) -->
+  <!-- POSITIVE (4-5 stars) -->
   <div class="section hidden" id="pos-sec">
     <div class="info pos">
       <div class="info-ico">🎉</div>
@@ -235,7 +240,7 @@ body{
     </button>
   </div>
 
-  <!-- NEGATIVE SECTION (1-3 stars) -->
+  <!-- NEGATIVE (1-3 stars) -->
   <div class="section hidden" id="neg-sec" style="position:relative">
 
     <div class="ov" id="ov-load">
@@ -259,33 +264,34 @@ body{
 
     <div class="sec-lbl" id="t-il">SELECT ISSUE (OPTIONAL):</div>
     <div class="tags" id="tag-row">
-      <button class="tag" onclick="toggleTag(this)" data-en="Slow Service" data-hi="Late Service">Slow Service</button>
-      <button class="tag" onclick="toggleTag(this)" data-en="Staff Behavior" data-hi="Staff Behavior">Staff Behavior</button>
-      <button class="tag" onclick="toggleTag(this)" data-en="High Pricing" data-hi="Mehnga Hai">High Pricing</button>
-      <button class="tag" onclick="toggleTag(this)" data-en="Hygiene Issue" data-hi="Safai Problem">Hygiene Issue</button>
-      <button class="tag" onclick="toggleTag(this)" data-en="Other" data-hi="Aur Kuch">Other</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="Slow Service" data-hi="धीमी सर्विस">Slow Service</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="Staff Behavior" data-hi="स्टाफ व्यवहार">Staff Behavior</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="High Pricing" data-hi="महंगा दाम">High Pricing</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="Hygiene Issue" data-hi="सफाई समस्या">Hygiene Issue</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="Other" data-hi="अन्य">Other</button>
     </div>
 
     <div class="field">
-      <label id="t-nl">Your Name (Optional)</label>
-      <input type="text" id="f-name" placeholder="e.g. Rahul Sharma">
-    </div>
-    <div class="field">
-      <label id="t-pl">Your Phone (Optional)</label>
-      <input type="tel" id="f-phone" placeholder="e.g. 9876543210">
-    </div>
-    <div class="field">
-      <label id="t-dl">Your Feedback</label>
-      <textarea id="f-text" rows="3" placeholder="Tell us what happened..."></textarea>
+      <label id="t-dl">Tell us more (Optional)</label>
+      <textarea id="f-text" rows="2" placeholder="Tell us what happened..."></textarea>
     </div>
 
-    <button class="btn btn-s" onclick="submitFeedback()">
+    <!-- Desktop inline button -->
+    <button class="btn btn-s" id="btn-submit-inline" onclick="submitFeedback()">
       <i class="fas fa-paper-plane"></i>
       <span id="t-sb">Send Feedback Privately</span>
     </button>
   </div>
 
   <div class="footer">Powered by <strong>Review Shield</strong></div>
+</div>
+
+<!-- STICKY SUBMIT BUTTON (Mobile only, shows when neg section visible) -->
+<div class="sticky-submit" id="sticky-wrap">
+  <button class="btn btn-s" onclick="submitFeedback()">
+    <i class="fas fa-paper-plane"></i>
+    <span>Send Feedback Privately</span>
+  </button>
 </div>
 
 <script>
@@ -303,11 +309,7 @@ var T = {
     sry:"We're sorry to hear that.",
     imp:"Help us improve — tell us what went wrong.",
     il:"SELECT ISSUE (OPTIONAL):",
-    nl:"Your Name (Optional)",
-    npl:"e.g. Rahul Sharma",
-    pl:"Your Phone (Optional)",
-    ppl:"e.g. 9876543210",
-    dl:"Your Feedback",
+    dl:"Tell us more (Optional)",
     dpl:"Tell us what happened...",
     sb:"Send Feedback Privately",
     snd:"Sending...",
@@ -317,7 +319,7 @@ var T = {
   hi:{
     sub:"हम आपके फीडबैक की कद्र करते हैं",
     rq:"आज का आपका अनुभव कैसा रहा?",
-    words:["","बहुत खराब 😞","खराब 😕","ठीक-थाक 😐","अच्छा 😊","शानदार 🤩"],
+    words:["","बहुत खराब 😞","खराब 😕","ठीक-ठाक 😐","अच्छा 😊","शानदार 🤩"],
     aw:"बहुत बढ़िया! धन्यवाद!",
     sup:"कृपया Google पर रिव्यू दें ताकि और लोग हमें ढूंढ सकें।",
     ql:"क्विक कॉपी — टैप करें:",
@@ -326,11 +328,7 @@ var T = {
     sry:"हमें खेद है।",
     imp:"क्या गलत हुआ? हमें बताइए।",
     il:"समस्या चुनें (वैकल्पिक):",
-    nl:"आपका नाम (वैकल्पिक)",
-    npl:"जैसे: राहुल शर्मा",
-    pl:"आपका फोन (वैकल्पिक)",
-    ppl:"जैसे: 9876543210",
-    dl:"आपकी प्रतिक्रिया",
+    dl:"विवरण बताएं (वैकल्पिक)",
     dpl:"क्या हुआ, बताइए...",
     sb:"फीडबैक भेजें",
     snd:"भेजा जा रहा है...",
@@ -339,31 +337,31 @@ var T = {
   }
 };
 
-// ── CATEGORY CHIPS ────────────────────────────────────────────────
+// ── CHIPS ─────────────────────────────────────────────────────────
 var CHIPS = {
   restaurant:{
     en:["Food was delicious and service was excellent!","Great ambiance, will definitely visit again.","Best restaurant in the area, highly recommended!"],
-    hi:["खाना बहुत स्वादिष्ट था और सर्विस शानदार थी!","माहौल बहुत अच्छा था, ज़रूर वापस आएंगे।","इलाके का सबसे अच्छा रेस्टोरेंट, पूरी तरह अनुशंसित!"]
+    hi:["खाना बहुत स्वादिष्ट था और सेवा शानदार थी!","माहौल बहुत अच्छा था, ज़रूर वापस आएंगे।","इलाके का सबसे अच्छा रेस्टोरेंट, पूरी तरह अनुशंसित!"]
   },
   salon:{
     en:["Amazing service and very professional staff!","Best experience ever, loved the results!","Hygienic, skilled and friendly professionals!"],
     hi:["बेहतरीन सेवा और बहुत ही पेशेवर स्टाफ!","अब तक का सबसे अच्छा अनुभव, परिणाम पसंद आए!","साफ-सुथरा, कुशल और मित्रवत पेशेवर!"]
   },
   clinic:{
-    en:["Doctor was thorough and caring!","Quick appointment, excellent treatment!","Highly recommend this clinic!"],
-    hi:["डॉक्टर बहुत अच्छे और caring थे!","जल्दी appointment, excellent treatment!","इस clinic को recommend करूंगा!"]
+    en:["Doctor was very thorough, caring and professional!","Quick appointment and excellent treatment!","Highly recommend this clinic to everyone!"],
+    hi:["डॉक्टर बहुत सावधान, देखभाल करने वाले और पेशेवर थे!","जल्दी अपॉइंटमेंट और शानदार इलाज मिला!","इस क्लिनिक को सभी को अनुशंसित करते हैं!"]
   },
   gym:{
-    en:["Great equipment and friendly trainers!","Clean gym with excellent coaching!","Best gym in town, worth it!"],
-    hi:["बढ़िया equipment और friendly trainers!","साफ़ gym, excellent coaching!","शहर का सबसे अच्छा gym!"]
+    en:["Great equipment and very friendly trainers!","Clean facility with excellent coaching and support!","Best gym in town, totally worth every penny!"],
+    hi:["बेहतरीन उपकरण और बहुत मित्रवत प्रशिक्षक!","साफ सुविधा, उत्कृष्ट कोचिंग और सहायता!","शहर का सबसे अच्छा जिम, हर पैसा वसूल!"]
   },
   travel:{
-    en:["Amazing travel experience, zero hassle!","Very professional and trustworthy agency!","Best travel agency, will book again!"],
-    hi:["शानदार travel experience!","बहुत professional और भरोसेमंद agency!","सबसे अच्छी travel agency!"]
+    en:["Amazing travel experience with zero hassle!","Very professional and completely trustworthy agency!","Best travel agency, will definitely book again!"],
+    hi:["बिना किसी परेशानी के शानदार यात्रा अनुभव!","बहुत पेशेवर और पूरी तरह भरोसेमंद एजेंसी!","सबसे अच्छी ट्रैवल एजेंसी, ज़रूर दोबारा बुक करेंगे!"]
   },
   default:{
-    en:["Great service and very friendly staff!","Highly recommended! Will visit again.","Excellent quality and value for money."],
-    hi:["बहुत अच्छी service और friendly staff!","ज़रूर आएं, शानदार अनुभव हुआ।","पैसा वसूल और excellent quality!"]
+    en:["Great service and very friendly staff!","Highly recommended, will definitely visit again.","Excellent quality and great value for money!"],
+    hi:["बहुत अच्छी सेवा और मित्रवत कर्मचारी!","पूरी तरह अनुशंसित, ज़रूर वापस आएंगे।","उत्कृष्ट गुणवत्ता और पैसे की पूरी कीमत!"]
   }
 };
 var ICONS = ["🌟","✨","💎"];
@@ -374,18 +372,16 @@ var rating = 0;
 var tags   = [];
 
 // ── URL PARAMS ────────────────────────────────────────────────────
-var P   = new URLSearchParams(window.location.search);
-var BIZ = P.get('n') || "Our Business";
-var ICO = P.get('i') || "🏪";
-var CAT = P.get('cat') || "default";
-var GL  = decodeURIComponent(P.get('g') || "#");
-var MODE= P.get('m') || "wa";
-var CON = decodeURIComponent(P.get('c') || "");
-var THM = decodeURIComponent(P.get('t') || "#3B82F6");
+var P    = new URLSearchParams(window.location.search);
+var BIZ  = P.get('n') || "Our Business";
+var CAT  = P.get('cat') || "default";
+var GL   = decodeURIComponent(P.get('g') || "#");
+var MODE = P.get('m') || "wa";
+var CON  = decodeURIComponent(P.get('c') || "");
+var THM  = decodeURIComponent(P.get('t') || "#3B82F6");
 
 // ── INIT ──────────────────────────────────────────────────────────
 document.getElementById('biz-name').innerText = BIZ;
-document.getElementById('biz-ico').innerText  = ICO;
 document.title = BIZ + " – Rate Us";
 applyTheme(THM);
 buildChips();
@@ -398,7 +394,7 @@ function applyTheme(hex) {
 }
 
 function buildChips() {
-  var cat  = CHIPS[CAT] ? CAT : 'default';
+  var cat = CHIPS[CAT] ? CAT : 'default';
   ['en','hi'].forEach(function(l) {
     var wrap = document.getElementById('chips-'+l);
     wrap.innerHTML = '';
@@ -419,14 +415,12 @@ function buildChips() {
 function initStars() {
   var stars = document.querySelectorAll('.star');
   stars.forEach(function(s) {
-    // Hover (desktop)
     s.addEventListener('mouseenter', function() {
       if(rating === 0) litStars(parseInt(s.getAttribute('data-v')));
     });
     s.addEventListener('mouseleave', function() {
       litStars(rating);
     });
-    // Click
     s.addEventListener('click', function() {
       rating = parseInt(s.getAttribute('data-v'));
       litStars(rating);
@@ -438,8 +432,8 @@ function initStars() {
 
 function litStars(n) {
   document.querySelectorAll('.star').forEach(function(s, i) {
-    if(i < n) { s.classList.add('lit'); }
-    else       { s.classList.remove('lit'); }
+    if(i < n) s.classList.add('lit');
+    else       s.classList.remove('lit');
   });
 }
 
@@ -453,22 +447,23 @@ function showSection(n) {
   var posEl = document.getElementById('pos-sec');
   var negEl = document.getElementById('neg-sec');
   var dvd   = document.getElementById('dvd');
+  var sticky= document.getElementById('sticky-wrap');
 
-  // Show divider
   dvd.style.display = 'block';
-
-  // Hide both first
   posEl.classList.add('hidden');
   negEl.classList.add('hidden');
+  sticky.classList.remove('show');
 
-  // Show the right one
   if(n >= 4) {
     posEl.classList.remove('hidden');
   } else {
     negEl.classList.remove('hidden');
+    // Show sticky button on mobile
+    if(window.innerWidth < 480) {
+      sticky.classList.add('show');
+    }
   }
 
-  // Scroll to divider
   setTimeout(function() {
     dvd.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 80);
@@ -479,16 +474,21 @@ function copyChip(btn, text) {
   document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('done'); });
   btn.classList.add('done');
 
-  // Try clipboard API, fallback for older browsers
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+
   try {
     if(navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).catch(function(){ fallbackCopy(text); });
-    } else {
-      fallbackCopy(text);
-    }
-  } catch(e) {
-    fallbackCopy(text);
-  }
+      navigator.clipboard.writeText(text).catch(fallback);
+    } else { fallback(); }
+  } catch(e) { fallback(); }
 
   var t = document.getElementById('toast');
   t.innerText = T[lang].toast;
@@ -496,61 +496,37 @@ function copyChip(btn, text) {
   setTimeout(function(){ t.classList.remove('show'); }, 3000);
 }
 
-function fallbackCopy(text) {
-  var ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
-  document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  document.execCommand('copy');
-  document.body.removeChild(ta);
-}
-
 // ── GOOGLE ────────────────────────────────────────────────────────
 function goGoogle() {
-  if(GL && GL !== '#') {
-    window.open(GL, '_blank');
-  } else {
-    alert('Google review link not configured. Please contact support.');
-  }
+  if(GL && GL !== '#') { window.open(GL, '_blank'); }
+  else { alert('Google review link not configured.'); }
 }
 
 // ── TAGS ─────────────────────────────────────────────────────────
 function toggleTag(btn) {
   var v = btn.getAttribute('data-en');
   var idx = tags.indexOf(v);
-  if(idx > -1) {
-    tags.splice(idx, 1);
-    btn.classList.remove('on');
-  } else {
-    tags.push(v);
-    btn.classList.add('on');
-  }
+  if(idx > -1) { tags.splice(idx,1); btn.classList.remove('on'); }
+  else          { tags.push(v);       btn.classList.add('on'); }
 }
 
 // ── SUBMIT ────────────────────────────────────────────────────────
 function submitFeedback() {
   if(!CON) { alert('Owner contact not configured.'); return; }
 
-  var name  = document.getElementById('f-name').value.trim();
-  var phone = document.getElementById('f-phone').value.trim();
-  var text  = document.getElementById('f-text').value.trim();
-  var issues= tags.length ? tags.join(', ') : 'Not specified';
+  var text   = document.getElementById('f-text').value.trim();
+  var issues = tags.length ? tags.join(', ') : 'Not specified';
 
   if(MODE === 'wa') {
-    var msg = '⚠️ *New Complaint Alert*\n'
-            + '🏪 *Business:* ' + BIZ + '\n'
-            + '⭐ *Rating:* ' + rating + ' Star(s)\n'
-            + '❗ *Issues:* ' + issues + '\n';
-    if(name)  msg += '👤 *Customer:* ' + name + '\n';
-    if(phone) msg += '📞 *Phone:* ' + phone + '\n';
-    if(text)  msg += '💬 *Message:* ' + text + '\n';
+    var msg = '\u26a0\ufe0f *New Complaint Alert*\n'
+            + '\uD83C\uDFEA *Business:* ' + BIZ + '\n'
+            + '\u2b50 *Rating:* ' + rating + ' Star(s)\n'
+            + '\u2757 *Issues:* ' + issues + '\n';
+    if(text) msg += '\uD83D\uDCAC *Message:* ' + text + '\n';
     msg += '\n_Sent via Review Shield_';
 
-    // Clean number
     var num = CON.replace(/[\s\-\(\)\+]/g, '');
     if(num.length === 10) num = '91' + num;
-
     window.location.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
 
   } else {
@@ -562,18 +538,16 @@ function submitFeedback() {
       Business: BIZ,
       Rating:   rating + ' Star(s)',
       Issues:   issues,
-      Customer: name  || 'Anonymous',
-      Phone:    phone || 'Not provided',
-      Message:  text  || 'No comment',
-      _subject: '⚠️ Complaint: ' + BIZ + ' (' + rating + '★)',
+      Message:  text || 'No comment',
+      _subject: 'Complaint: ' + BIZ + ' (' + rating + ' Star)',
       _template:'box',
       _captcha: 'false'
     };
 
     fetch('https://formsubmit.co/ajax/' + encodeURIComponent(CON), {
-      method: 'POST',
+      method:  'POST',
       headers: {'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify(payload)
+      body:    JSON.stringify(payload)
     })
     .then(function(r){ return r.json(); })
     .then(function() {
@@ -597,26 +571,25 @@ function switchLang() {
 
 function applyLang() {
   var d = T[lang];
-  function s(id, val){ var e=document.getElementById(id); if(e) e.innerText=val; }
-  function p(id, val){ var e=document.getElementById(id); if(e) e.placeholder=val; }
+  function s(id,v){ var e=document.getElementById(id); if(e) e.innerText=v; }
+  function p(id,v){ var e=document.getElementById(id); if(e) e.placeholder=v; }
 
-  s('t-sub', d.sub); s('t-rq', d.rq);
-  s('t-aw', d.aw);   s('t-sup', d.sup);
-  s('t-ql', d.ql);   s('t-gp', d.gp);
-  s('t-sry', d.sry); s('t-imp', d.imp);
-  s('t-il', d.il);   s('t-nl', d.nl);
-  s('t-pl', d.pl);   s('t-dl', d.dl);
-  s('t-sb', d.sb);   s('t-snd', d.snd);
-  s('t-okt', d.okt); s('t-okm', d.okm);
-  p('f-name', d.npl); p('f-phone', d.ppl); p('f-text', d.dpl);
+  s('t-sub',d.sub); s('t-rq',d.rq);
+  s('t-aw',d.aw);   s('t-sup',d.sup);
+  s('t-ql',d.ql);   s('t-gp',d.gp);
+  s('t-sry',d.sry); s('t-imp',d.imp);
+  s('t-il',d.il);   s('t-dl',d.dl);
+  s('t-sb',d.sb);   s('t-snd',d.snd);
+  s('t-okt',d.okt); s('t-okm',d.okm);
+  p('f-text',d.dpl);
 
-  if(rating > 0) showWord(rating);
+  if(rating>0) showWord(rating);
 
-  document.querySelectorAll('.tag').forEach(function(t) {
-    t.innerText = t.getAttribute('data-' + lang);
+  document.querySelectorAll('.tag').forEach(function(t){
+    t.innerText = t.getAttribute('data-'+lang);
   });
 
-  if(lang === 'en') {
+  if(lang==='en'){
     document.getElementById('chips-en').classList.remove('hidden');
     document.getElementById('chips-hi').classList.add('hidden');
   } else {
