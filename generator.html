@@ -155,8 +155,8 @@
         <div class="contact-group" id="em-grp">
             <div class="form-group">
                 <label>Owner Email Address *</label>
-                <input type="email" id="f-email" placeholder="owner@business.com">
-                <div class="hint">⚠️ First time: Client will get a FormSubmit activation email. They need to click "Confirm" once.</div>
+                <input type="email" id="f-email" placeholder="owner@gmail.com">
+                <div class="hint">⚠️ Pehli baar: Client ke email pe ek confirmation mail aayega — uspe "Activate" click karna hoga. Uske baad complaints directly aati rahenge.</div>
             </div>
         </div>
 
@@ -251,16 +251,29 @@
         document.getElementById('out-url').value = url;
         document.getElementById('preview-a').href = url;
 
-        // QR
-        document.getElementById('qrcode').innerHTML = '';
-        new QRCode(document.getElementById('qrcode'), {
+        // QR — generate first, then draw branded canvas card
+        var qrWrap = document.getElementById('qrcode');
+        qrWrap.innerHTML = '';
+
+        var tempDiv = document.createElement('div');
+        tempDiv.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
+        document.body.appendChild(tempDiv);
+
+        new QRCode(tempDiv, {
             text: url, width: 220, height: 220,
             colorDark: '#000000', colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.H
         });
 
+        // Wait for QR to render, then draw branded card
+        setTimeout(function() {
+            var qrImg = tempDiv.querySelector('img') || tempDiv.querySelector('canvas');
+            drawBrandedQR(qrImg, name, chosenColor, qrWrap);
+            document.body.removeChild(tempDiv);
+        }, 300);
+
         document.getElementById('result').style.display = 'block';
-        setTimeout(() => document.getElementById('result').scrollIntoView({ behavior:'smooth' }), 100);
+        setTimeout(function(){ document.getElementById('result').scrollIntoView({ behavior:'smooth' }); }, 100);
     }
 
     function copyURL() {
@@ -271,6 +284,65 @@
     }
 
     function enc(v) { return encodeURIComponent(v); }
+
+    function drawBrandedQR(qrSource, bizName, color, container) {
+        var QR_SIZE   = 220;
+        var PADDING   = 20;
+        var HDR_H     = 50;  // top colored header
+        var FOOT_H    = 40;  // bottom footer
+        var W = QR_SIZE + PADDING * 2;
+        var H = HDR_H + PADDING + QR_SIZE + PADDING + FOOT_H;
+
+        var canvas = document.createElement('canvas');
+        canvas.width  = W;
+        canvas.height = H;
+        var ctx = canvas.getContext('2d');
+
+        // White background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, W, H);
+
+        // Colored top header
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, W, HDR_H);
+
+        // Business name in header
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 15px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        // Truncate if too long
+        var bName = bizName.length > 28 ? bizName.slice(0,26) + '…' : bizName;
+        ctx.fillText(bName, W / 2, HDR_H / 2);
+
+        // Draw QR image
+        var y = HDR_H + PADDING;
+        if(qrSource) {
+            try { ctx.drawImage(qrSource, PADDING, y, QR_SIZE, QR_SIZE); }
+            catch(e) { console.log('QR draw error', e); }
+        }
+
+        // Footer background
+        ctx.fillStyle = '#F3F4F6';
+        ctx.fillRect(0, HDR_H + PADDING + QR_SIZE + PADDING, W, FOOT_H);
+
+        // Footer text
+        ctx.fillStyle = '#4B5563';
+        ctx.font = '12px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('⭐ Scan to Rate Your Experience', W / 2, HDR_H + PADDING + QR_SIZE + PADDING + FOOT_H / 2);
+
+        // Border
+        ctx.strokeStyle = '#E5E7EB';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(0.75, 0.75, W - 1.5, H - 1.5);
+
+        container.innerHTML = '';
+        canvas.style.cssText = 'border-radius:10px;display:block;cursor:pointer;';
+        canvas.title = 'Right-click → Save image as to download';
+        container.appendChild(canvas);
+    }
 </script>
 </body>
 </html>
