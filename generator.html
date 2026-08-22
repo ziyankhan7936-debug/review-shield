@@ -3,156 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link & QR Generator - Review Shield</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Review Shield – Client Setup</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F3F4F6; min-height: 100vh; padding: 32px 16px;
+            color: #1F2937;
+        }
+        .wrap { max-width: 580px; margin: 0 auto; }
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 2px 20px rgba(0,0,0,0.09); padding: 32px; margin-bottom: 24px; }
+        h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+        .subtitle { font-size: 14px; color: #6B7280; margin-bottom: 28px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+        .hint { font-size: 11px; color: #9CA3AF; margin-top: 4px; }
+        input, select, textarea {
+            width: 100%; padding: 11px 14px;
+            border: 1.5px solid #E5E7EB; border-radius: 10px;
+            font-size: 14px; color: #1F2937;
+            outline: none; transition: border-color 0.2s;
+            font-family: inherit;
+        }
+        input:focus, select:focus { border-color: #3B82F6; }
+        .radio-group { display: flex; gap: 16px; flex-wrap: wrap; }
+        .radio-opt {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 16px; border: 1.5px solid #E5E7EB;
+            border-radius: 10px; cursor: pointer; font-size: 14px;
+            font-weight: 500; transition: all 0.18s; flex: 1; min-width: 140px;
+        }
+        .radio-opt input[type=radio] { width: auto; }
+        .radio-opt.active { border-color: #3B82F6; background: #EFF6FF; color: #1D4ED8; }
+        .contact-group { display: none; }
+        .contact-group.show { display: block; }
+        .color-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+        .color-swatch {
+            width: 36px; height: 36px; border-radius: 50%;
+            cursor: pointer; border: 3px solid transparent;
+            transition: transform 0.15s, border-color 0.15s;
+            flex-shrink: 0;
+        }
+        .color-swatch.sel { border-color: #1F2937; transform: scale(1.15); }
+        input[type=color] { width: 40px; height: 36px; padding: 2px; border-radius: 8px; cursor: pointer; }
+        .btn-gen {
+            width: 100%; padding: 15px;
+            background: #3B82F6; color: #fff;
+            font-size: 16px; font-weight: 700;
+            border: none; border-radius: 12px;
+            cursor: pointer; transition: background 0.2s;
+            margin-top: 6px;
+        }
+        .btn-gen:hover { background: #2563EB; }
+        /* Result */
+        #result { display: none; }
+        .url-row { display: flex; gap: 0; }
+        .url-inp {
+            flex: 1; padding: 11px 14px;
+            border: 1.5px solid #E5E7EB; border-radius: 10px 0 0 10px;
+            font-size: 13px; color: #374151;
+            background: #F9FAFB; outline: none;
+        }
+        .btn-copy {
+            padding: 11px 18px;
+            background: #1F2937; color: #fff;
+            font-size: 13px; font-weight: 700;
+            border: none; border-radius: 0 10px 10px 0;
+            cursor: pointer; white-space: nowrap;
+        }
+        .btn-copy:hover { background: #111827; }
+        .preview-link {
+            display: inline-block; margin-top: 10px;
+            color: #3B82F6; font-size: 13px; font-weight: 600;
+            text-decoration: none;
+        }
+        .preview-link:hover { text-decoration: underline; }
+        .qr-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 8px; }
+        #qrcode img { border-radius: 8px; }
+        .qr-note { font-size: 12px; color: #9CA3AF; margin-top: 10px; text-align: center; max-width: 260px; }
+        .badge {
+            display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 3px 9px; border-radius: 50px;
+            background: #DCFCE7; color: #15803D; margin-left: 8px;
+        }
+        .sec-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+        hr { border: none; border-top: 1px solid #F3F4F6; margin: 20px 0; }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-8 font-sans">
-    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2 border-b pb-4">Review Shield - Setup Dashboard</h1>
-        <p class="text-gray-500 text-sm mb-6">Generate a custom portal link and QR code for your clients.</p>
-        
-        <div class="space-y-4">
-            <!-- Business Name -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Business Name</label>
-                <input type="text" id="b-name" placeholder="e.g., Fair Tours & Travels" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
-            </div>
+<body>
+<div class="wrap">
 
-            <!-- Google Review Link -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Google Review Link</label>
-                <input type="url" id="b-glink" placeholder="https://g.page/r/..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
-            </div>
+    <!-- HEADER CARD -->
+    <div class="card">
+        <h1>Review Shield <span class="badge">Admin</span></h1>
+        <div class="subtitle">Fill in client details to generate their custom portal link & QR code.</div>
 
-            <!-- Delivery Method -->
-            <div class="bg-gray-50 p-4 border rounded-lg">
-                <label class="block text-sm font-bold text-gray-700 mb-3">How should negative feedback be delivered?</label>
-                <div class="flex items-center space-x-6 mb-4">
-                    <label class="flex items-center">
-                        <input type="radio" name="delivery-mode" value="wa" checked onchange="toggleDeliveryMode()" class="h-4 w-4 text-blue-600">
-                        <span class="ml-2 text-sm text-gray-700">WhatsApp (Customer hits Send)</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="delivery-mode" value="em" onchange="toggleDeliveryMode()" class="h-4 w-4 text-blue-600">
-                        <span class="ml-2 text-sm text-gray-700">Automatic Email (Hidden, Auto-Send)</span>
-                    </label>
-                </div>
-
-                <!-- WhatsApp Input -->
-                <div id="wa-input-group">
-                    <label class="block text-sm font-medium text-gray-700">Owner WhatsApp Number</label>
-                    <div class="flex mt-1">
-                        <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-200 text-gray-500 sm:text-sm">+91</span>
-                        <input type="text" id="b-wa" placeholder="9876543210" class="flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300 border p-2">
-                    </div>
-                </div>
-
-                <!-- Email Input -->
-                <div id="em-input-group" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700">Owner Email Address</label>
-                    <input type="email" id="b-email" placeholder="owner@business.com" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                    <p class="text-xs text-red-500 mt-1">* Note: First time feedback is sent, the owner will receive a confirmation email from FormSubmit.co to activate it.</p>
-                </div>
-            </div>
-
-            <!-- Theme Color -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Theme Color</label>
-                <input type="color" id="b-theme" value="#3B82F6" class="mt-1 block h-10 w-full cursor-pointer rounded-md border-gray-300 shadow-sm">
-            </div>
-
-            <button onclick="generate()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">
-                Generate Custom Link & QR Code
-            </button>
+        <!-- Business Name -->
+        <div class="form-group">
+            <label>Business Name *</label>
+            <input type="text" id="f-name" placeholder="e.g. Fair Tours & Travels">
         </div>
 
-        <div id="result-section" class="hidden mt-8 pt-8 border-t">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Generated Assets</h2>
-            
-            <div class="bg-gray-50 p-4 rounded-lg mb-6 border">
-                <p class="text-sm font-medium text-gray-700 mb-2">Live Portal URL:</p>
-                <div class="flex">
-                    <input type="text" id="gen-url" readonly class="flex-1 block w-full rounded-l-md border-gray-300 border p-2 text-sm bg-white">
-                    <button onclick="copyUrl()" class="px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-r-md hover:bg-gray-900 transition">Copy</button>
-                </div>
-                <div class="mt-3">
-                    <a id="preview-link" href="#" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">Preview Portal (Opens in new tab)</a>
-                </div>
-            </div>
+        <!-- Business Category -->
+        <div class="form-group">
+            <label>Business Category</label>
+            <select id="f-cat">
+                <option value="default">General / Other</option>
+                <option value="restaurant">Restaurant / Cafe / Dhaba</option>
+                <option value="salon">Salon / Spa / Beauty</option>
+                <option value="clinic">Clinic / Hospital / Doctor</option>
+                <option value="gym">Gym / Fitness Center</option>
+                <option value="travel">Travel Agency / Tour Operator</option>
+            </select>
+            <div class="hint">This customizes the review suggestion chips for customers.</div>
+        </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm font-medium text-gray-700 mb-3">Customer QR Code:</p>
-                <div id="qrcode" class="p-4 bg-white shadow-sm border rounded-lg"></div>
-                <p class="text-xs text-gray-500 mt-2 text-center max-w-xs">Right-click the QR code above and select "Save Image As" to download it, or use a clipping tool to paste it into Canva.</p>
+
+
+        <!-- Google Review Link -->
+        <div class="form-group">
+            <label>Google Review Link *</label>
+            <input type="url" id="f-glink" placeholder="https://g.page/r/...">
+            <div class="hint">Get this from Google Maps → Share → Copy Link. Paste here.</div>
+        </div>
+
+        <!-- Delivery Mode -->
+        <div class="form-group">
+            <label>Negative Feedback Delivery *</label>
+            <div class="radio-group" id="mode-group">
+                <div class="radio-opt active" onclick="selectMode('wa', this)">
+                    <input type="radio" name="mode" value="wa" checked>
+                    📱 WhatsApp
+                </div>
+                <div class="radio-opt" onclick="selectMode('em', this)">
+                    <input type="radio" name="mode" value="em">
+                    ✉️ Auto Email
+                </div>
             </div>
+        </div>
+
+        <!-- WhatsApp Number -->
+        <div class="contact-group show" id="wa-grp">
+            <div class="form-group">
+                <label>Owner WhatsApp Number *</label>
+                <input type="tel" id="f-wa" placeholder="9876543210 (10 digits, no +91)">
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="contact-group" id="em-grp">
+            <div class="form-group">
+                <label>Owner Email Address *</label>
+                <input type="email" id="f-email" placeholder="owner@business.com">
+                <div class="hint">⚠️ First time: Client will get a FormSubmit activation email. They need to click "Confirm" once.</div>
+            </div>
+        </div>
+
+        <!-- Theme Color -->
+        <div class="form-group">
+            <label>Theme Color</label>
+            <div class="color-row">
+                <div class="color-swatch sel" style="background:#3B82F6;" data-c="#3B82F6" onclick="pickSwatch(this)"></div>
+                <div class="color-swatch" style="background:#10B981;" data-c="#10B981" onclick="pickSwatch(this)"></div>
+                <div class="color-swatch" style="background:#F59E0B;" data-c="#F59E0B" onclick="pickSwatch(this)"></div>
+                <div class="color-swatch" style="background:#EF4444;" data-c="#EF4444" onclick="pickSwatch(this)"></div>
+                <div class="color-swatch" style="background:#8B5CF6;" data-c="#8B5CF6" onclick="pickSwatch(this)"></div>
+                <div class="color-swatch" style="background:#EC4899;" data-c="#EC4899" onclick="pickSwatch(this)"></div>
+                <div class="color-swatch" style="background:#111827;" data-c="#111827" onclick="pickSwatch(this)"></div>
+                <input type="color" id="f-color" value="#3B82F6" oninput="customColor(this.value)" title="Custom Color">
+            </div>
+        </div>
+
+        <button class="btn-gen" onclick="generate()">⚡ Generate Portal Link & QR Code</button>
+    </div>
+
+    <!-- RESULT CARD -->
+    <div class="card" id="result">
+        <div class="sec-title">✅ Client Portal Ready</div>
+
+        <label style="font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;display:block;">Live Portal URL</label>
+        <div class="url-row">
+            <input class="url-inp" id="out-url" readonly>
+            <button class="btn-copy" onclick="copyURL()">Copy</button>
+        </div>
+        <a id="preview-a" href="#" target="_blank" class="preview-link">🔗 Preview Portal (opens in new tab)</a>
+
+        <hr>
+
+        <div class="sec-title">📱 Customer QR Code</div>
+        <div class="qr-wrap">
+            <div id="qrcode"></div>
+            <div class="qr-note">Right-click → "Save image as" to download. Then paste in Canva Standee template.</div>
         </div>
     </div>
 
-    <script>
-        function toggleDeliveryMode() {
-            const mode = document.querySelector('input[name="delivery-mode"]:checked').value;
-            if (mode === 'wa') {
-                document.getElementById('wa-input-group').classList.remove('hidden');
-                document.getElementById('em-input-group').classList.add('hidden');
-            } else {
-                document.getElementById('wa-input-group').classList.add('hidden');
-                document.getElementById('em-input-group').classList.remove('hidden');
-            }
+</div>
+
+<script>
+    let chosenColor = '#3B82F6';
+    let chosenMode  = 'wa';
+
+    function selectMode(mode, el) {
+        chosenMode = mode;
+        document.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('wa-grp').classList.toggle('show', mode === 'wa');
+        document.getElementById('em-grp').classList.toggle('show', mode === 'em');
+    }
+
+    function pickSwatch(el) {
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('sel'));
+        el.classList.add('sel');
+        chosenColor = el.dataset.c;
+        document.getElementById('f-color').value = chosenColor;
+    }
+
+    function customColor(val) {
+        chosenColor = val;
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('sel'));
+    }
+
+    function generate() {
+        const name  = document.getElementById('f-name').value.trim();
+        const cat   = document.getElementById('f-cat').value;
+        const glink = document.getElementById('f-glink').value.trim();
+        const wa    = document.getElementById('f-wa').value.trim();
+        const email = document.getElementById('f-email').value.trim();
+
+        if(!name)  { alert('Please enter Business Name.'); return; }
+        if(!glink) { alert('Please enter Google Review Link.'); return; }
+
+        let contact = '';
+        if(chosenMode === 'wa') {
+            if(!wa) { alert('Please enter WhatsApp number.'); return; }
+            contact = wa.replace(/\D/g,'');
+            if(contact.length !== 10) { alert('WhatsApp number must be 10 digits.'); return; }
+        } else {
+            if(!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+            contact = email;
         }
 
-        function generate() {
-            const name = document.getElementById('b-name').value;
-            const glink = document.getElementById('b-glink').value;
-            const theme = document.getElementById('b-theme').value;
-            const mode = document.querySelector('input[name="delivery-mode"]:checked').value;
-            
-            let contactInfo = "";
-            if (mode === 'wa') {
-                contactInfo = document.getElementById('b-wa').value;
-                if(!name || !glink || !contactInfo) {
-                    alert("Please fill in Name, Google Link, and WhatsApp Number.");
-                    return;
-                }
-            } else {
-                contactInfo = document.getElementById('b-email').value;
-                if(!name || !glink || !contactInfo) {
-                    alert("Please fill in Name, Google Link, and Email Address.");
-                    return;
-                }
-            }
+        // Build URL
+        const base = window.location.href.replace('generator.html', 'index.html');
+        const url  = `${base}?n=${enc(name)}&cat=${enc(cat)}&g=${enc(glink)}&m=${enc(chosenMode)}&c=${enc(contact)}&t=${enc(chosenColor)}`;
 
-            // Construct the base URL
-            const baseUrl = window.location.href.replace('generator.html', 'index.html');
-            
-            // final URL with &m= (mode) and &c= (contact)
-            const finalUrl = `${baseUrl}?n=${encodeURIComponent(name)}&g=${encodeURIComponent(glink)}&m=${encodeURIComponent(mode)}&c=${encodeURIComponent(contactInfo)}&t=${encodeURIComponent(theme)}`;
+        document.getElementById('out-url').value = url;
+        document.getElementById('preview-a').href = url;
 
-            document.getElementById('gen-url').value = finalUrl;
-            document.getElementById('preview-link').href = finalUrl;
-            
-            // Clear previous QR
-            document.getElementById('qrcode').innerHTML = "";
-            
-            // Generate new QR
-            new QRCode(document.getElementById("qrcode"), {
-                text: finalUrl,
-                width: 200,
-                height: 200,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+        // QR
+        document.getElementById('qrcode').innerHTML = '';
+        new QRCode(document.getElementById('qrcode'), {
+            text: url, width: 220, height: 220,
+            colorDark: '#000000', colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
 
-            document.getElementById('result-section').classList.remove('hidden');
-        }
+        document.getElementById('result').style.display = 'block';
+        setTimeout(() => document.getElementById('result').scrollIntoView({ behavior:'smooth' }), 100);
+    }
 
-        function copyUrl() {
-            const urlInput = document.getElementById('gen-url');
-            urlInput.select();
-            document.execCommand("copy");
-            alert("URL copied to clipboard!");
-        }
-    </script>
+    function copyURL() {
+        const el = document.getElementById('out-url');
+        el.select(); el.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        alert('URL copied!');
+    }
+
+    function enc(v) { return encodeURIComponent(v); }
+</script>
 </body>
 </html>
