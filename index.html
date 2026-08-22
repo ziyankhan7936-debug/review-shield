@@ -1,866 +1,629 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rate Your Experience</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* =============================================
-           BASE & RESET
-        ============================================= */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rate Your Experience</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --theme:#3B82F6;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+html{font-size:16px}
+body{
+  font-family:var(--font);
+  background:#F3F4F6;
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+@media(min-width:480px){
+  body{align-items:center;padding:32px 16px}
+}
 
-        :root {
-            --theme: #3B82F6;
-            --theme-dark: #2563EB;
-            --theme-light: #EFF6FF;
-            --gray-50: #F9FAFB;
-            --gray-100: #F3F4F6;
-            --gray-200: #E5E7EB;
-            --gray-400: #9CA3AF;
-            --gray-600: #4B5563;
-            --gray-700: #374151;
-            --gray-800: #1F2937;
-            --gray-900: #111827;
-            --yellow: #FBBF24;
-            --yellow-hover: #F59E0B;
-            --green: #10B981;
-            --red-light: #FEF2F2;
-            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            --radius-lg: 20px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --shadow-card: 0 4px 24px rgba(0,0,0,0.10);
-            --shadow-btn: 0 2px 8px rgba(0,0,0,0.15);
-        }
+/* ── CARD ── */
+.card{
+  width:100%;max-width:440px;
+  background:#fff;
+  border-radius:0 0 20px 20px;
+  box-shadow:0 4px 30px rgba(0,0,0,.12);
+  overflow:hidden;
+}
+@media(min-width:480px){.card{border-radius:20px}}
 
-        html { font-size: 16px; }
-        body {
-            font-family: var(--font);
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 0 0 40px 0;
-            -webkit-font-smoothing: antialiased;
-        }
+/* ── HEADER ── */
+.hdr{
+  background:var(--theme);
+  padding:34px 22px 26px;
+  text-align:center;
+  position:relative;
+}
+.lang-btn{
+  position:absolute;top:14px;right:14px;
+  background:rgba(255,255,255,.25);
+  border:1.5px solid rgba(255,255,255,.4);
+  color:#fff;font-size:13px;font-weight:700;
+  padding:6px 14px;border-radius:50px;
+  cursor:pointer;min-height:36px;
+  -webkit-tap-highlight-color:transparent;
+}
+.biz-ico{
+  font-size:36px;line-height:1;
+  width:68px;height:68px;
+  background:rgba(255,255,255,.95);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;
+  box-shadow:0 4px 14px rgba(0,0,0,.15);
+}
+.biz-name{font-size:21px;font-weight:800;color:#fff;margin-bottom:5px;line-height:1.25}
+.biz-sub{font-size:13px;color:rgba(255,255,255,.88)}
 
-        /* =============================================
-           CARD
-        ============================================= */
-        .card {
-            width: 100%;
-            max-width: 440px;
-            background: #fff;
-            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-            box-shadow: var(--shadow-card);
-            overflow: hidden;
-            position: relative;
-        }
-        @media (min-width: 480px) {
-            body { align-items: center; padding: 32px 16px; }
-            .card { border-radius: var(--radius-lg); }
-        }
+/* ── STARS ── */
+.star-sec{padding:28px 22px 22px;text-align:center}
+.star-q{font-size:18px;font-weight:700;color:#1F2937;margin-bottom:22px;line-height:1.4}
+.stars{display:flex;justify-content:center;gap:6px;margin-bottom:12px}
+.star{
+  font-size:46px;color:#E5E7EB;
+  cursor:pointer;padding:4px;
+  transition:color .1s,transform .1s;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;line-height:1;
+}
+.star:active{transform:scale(.85)}
+.star.lit{color:#FBBF24}
+.rate-word{font-size:15px;font-weight:600;color:#9CA3AF;height:24px;transition:color .2s}
+.rate-word.active{color:#374151}
 
-        /* =============================================
-           HEADER
-        ============================================= */
-        .header {
-            background: var(--theme);
-            padding: 36px 24px 28px;
-            text-align: center;
-            position: relative;
-        }
-        .lang-toggle {
-            position: absolute;
-            top: 16px; right: 16px;
-            background: rgba(255,255,255,0.25);
-            border: 1.5px solid rgba(255,255,255,0.40);
-            color: #fff;
-            font-size: 13px;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 50px;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            min-height: 36px;
-            transition: background 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .lang-toggle:active { background: rgba(255,255,255,0.40); }
+/* ── DIVIDER ── */
+.divider{height:1px;background:#F3F4F6;margin:0 20px}
 
-        .biz-avatar {
-            width: 72px; height: 72px;
-            background: rgba(255,255,255,0.95);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .biz-avatar i {
-            font-size: 32px;
-            color: var(--theme);
-        }
-        .biz-name {
-            font-size: 22px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -0.3px;
-            margin-bottom: 6px;
-            line-height: 1.2;
-        }
-        .biz-subtitle {
-            font-size: 14px;
-            color: rgba(255,255,255,0.85);
-            font-weight: 400;
-        }
+/* ── SECTIONS — hidden/shown purely via class ── */
+.section{padding:22px 20px}
+.section.hidden{display:none}
 
-        /* =============================================
-           RATING SECTION
-        ============================================= */
-        .rating-section {
-            padding: 32px 24px 28px;
-            text-align: center;
-        }
-        .rate-label {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-800);
-            margin-bottom: 28px;
-            line-height: 1.35;
-        }
+/* ── INFO CARDS ── */
+.info{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;margin-bottom:20px}
+.info.pos{background:#F0FDF4;border:1.5px solid #BBF7D0}
+.info.neg{background:#FEF2F2;border:1.5px solid #FECACA}
+.info-ico{
+  width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.pos .info-ico{background:#DCFCE7}
+.neg .info-ico{background:#FEE2E2}
+.info-title{font-size:17px;font-weight:800;color:#111827}
+.info-sub{font-size:13px;color:#4B5563;margin-top:3px;line-height:1.45}
 
-        /* Stars */
-        .stars-wrap {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-        .star {
-            font-size: 44px;
-            color: var(--gray-200);
-            cursor: pointer;
-            transition: color 0.12s ease, transform 0.10s ease;
-            /* Large touch target */
-            padding: 4px;
-            -webkit-tap-highlight-color: transparent;
-            display: inline-block;
-            line-height: 1;
-            user-select: none;
-        }
-        .star.hovered, .star.selected-active {
-            color: var(--yellow);
-        }
-        .star:active {
-            transform: scale(0.88);
-        }
+/* ── SECTION LABEL ── */
+.sec-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9CA3AF;margin-bottom:10px}
 
-        .rating-word {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--gray-400);
-            height: 22px;
-            transition: all 0.2s;
-        }
-        .rating-word.visible {
-            color: var(--gray-700);
-        }
+/* ── CHIPS ── */
+.chips{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.chip{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 14px;border:1.5px solid #E5E7EB;
+  border-radius:12px;background:#fff;
+  font-size:14px;font-weight:500;color:#374151;
+  cursor:pointer;text-align:left;min-height:52px;
+  width:100%;
+  -webkit-tap-highlight-color:transparent;
+  transition:border-color .18s,background .18s;
+}
+.chip.done{background:#EFF6FF;border-color:#3B82F6;color:#1D4ED8}
+.chip-ico{font-size:20px;flex-shrink:0}
+.chip-txt{flex:1}
+.chip-chk{color:#3B82F6;opacity:0;transition:opacity .2s;font-size:15px}
+.chip.done .chip-chk{opacity:1}
 
-        /* =============================================
-           DIVIDER
-        ============================================= */
-        .section-divider {
-            height: 1px;
-            background: var(--gray-100);
-            margin: 0 24px;
-        }
+/* ── TOAST ── */
+.toast{text-align:center;font-size:13px;font-weight:600;color:#10B981;height:20px;margin-bottom:12px;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
 
-        /* =============================================
-           POSITIVE SECTION
-        ============================================= */
-        .action-section {
-            padding: 24px 20px;
-            display: none;
-            animation: slideDown 0.3s ease forwards;
-        }
-        .action-section.visible { display: block; }
+/* ── BUTTONS ── */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px 20px;
+  font-size:16px;font-weight:700;
+  border:none;border-radius:12px;cursor:pointer;
+  min-height:56px;
+  -webkit-tap-highlight-color:transparent;
+  transition:filter .18s,transform .12s;
+}
+.btn:active{filter:brightness(.88);transform:scale(.98)}
+.btn-g{background:var(--theme);color:#fff}
+.btn-s{background:#1F2937;color:#fff}
+.btn i{font-size:18px}
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+/* ── TAGS ── */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.tag{
+  padding:9px 16px;border:1.5px solid #E5E7EB;
+  border-radius:50px;background:#fff;
+  font-size:13px;font-weight:600;color:#374151;
+  cursor:pointer;min-height:40px;display:flex;align-items:center;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .18s;
+}
+.tag:active{transform:scale(.95)}
+.tag.on{background:#1F2937;border-color:#1F2937;color:#fff}
 
-        /* Positive header */
-        .positive-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-            padding: 16px;
-            background: #F0FDF4;
-            border-radius: var(--radius-md);
-            border: 1.5px solid #BBF7D0;
-        }
-        .positive-icon {
-            width: 48px; height: 48px;
-            background: #DCFCE7;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-            font-size: 22px;
-        }
-        .positive-title {
-            font-size: 18px; font-weight: 800; color: var(--gray-900);
-        }
-        .positive-sub {
-            font-size: 13px; color: var(--gray-600); margin-top: 3px; line-height: 1.4;
-        }
+/* ── FIELDS ── */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:600;color:#4B5563;margin-bottom:5px}
+.field input,.field textarea{
+  width:100%;padding:12px 14px;
+  border:1.5px solid #E5E7EB;border-radius:10px;
+  font-size:14px;font-family:var(--font);color:#1F2937;
+  outline:none;transition:border-color .2s;resize:none;
+}
+.field input:focus,.field textarea:focus{border-color:var(--theme)}
 
-        /* Chips */
-        .chips-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--gray-400);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .chips-wrap { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
-        .chip {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 16px;
-            border: 1.5px solid var(--gray-200);
-            border-radius: var(--radius-md);
-            background: #fff;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-700);
-            cursor: pointer;
-            transition: all 0.18s;
-            text-align: left;
-            min-height: 52px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .chip:active { transform: scale(0.98); }
-        .chip.copied {
-            background: var(--theme-light);
-            border-color: var(--theme);
-            color: var(--theme-dark);
-        }
-        .chip .chip-emoji { font-size: 20px; flex-shrink: 0; }
-        .chip .chip-check {
-            margin-left: auto;
-            color: var(--theme);
-            font-size: 16px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .chip.copied .chip-check { opacity: 1; }
+/* ── OVERLAYS ── */
+.ov{
+  position:absolute;inset:0;
+  background:rgba(255,255,255,.96);
+  display:none;
+  flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:32px;z-index:30;
+  border-radius:0 0 20px 20px;
+}
+.ov.show{display:flex}
+.spin{font-size:36px;margin-bottom:14px;animation:spin .85s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ok-ico{
+  width:76px;height:76px;border-radius:50%;
+  background:#DCFCE7;
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;color:#10B981;margin-bottom:18px;
+}
+.ov-title{font-size:22px;font-weight:800;color:#111827;margin-bottom:10px}
+.ov-msg{font-size:14px;color:#4B5563;line-height:1.65}
 
-        /* Copy toast */
-        .copy-toast {
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--green);
-            height: 20px;
-            margin-bottom: 12px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .copy-toast.show { opacity: 1; }
-
-        /* Google Button */
-        .btn-google {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 16px 20px;
-            background: var(--theme);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            border: none;
-            box-shadow: var(--shadow-btn);
-            letter-spacing: 0.2px;
-            transition: background 0.18s, transform 0.12s;
-            min-height: 56px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .btn-google:active { background: var(--theme-dark); transform: scale(0.98); }
-        .btn-google i { font-size: 20px; }
-
-        /* =============================================
-           NEGATIVE SECTION
-        ============================================= */
-        .negative-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-            padding: 16px;
-            background: var(--red-light);
-            border-radius: var(--radius-md);
-            border: 1.5px solid #FECACA;
-        }
-        .negative-icon {
-            width: 48px; height: 48px;
-            background: #FEE2E2;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-            font-size: 22px;
-        }
-        .negative-title {
-            font-size: 17px; font-weight: 800; color: var(--gray-900);
-        }
-        .negative-sub {
-            font-size: 13px; color: var(--gray-600); margin-top: 3px; line-height: 1.4;
-        }
-
-        /* Tags */
-        .tags-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--gray-400);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .tags-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .tag {
-            padding: 9px 16px;
-            border: 1.5px solid var(--gray-200);
-            border-radius: 50px;
-            background: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-700);
-            cursor: pointer;
-            transition: all 0.18s;
-            min-height: 40px;
-            display: flex; align-items: center;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .tag.selected {
-            background: var(--gray-900);
-            border-color: var(--gray-900);
-            color: #fff;
-        }
-        .tag:active { transform: scale(0.95); }
-
-        /* Textarea */
-        .feedback-textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid var(--gray-200);
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            font-family: var(--font);
-            color: var(--gray-800);
-            resize: none;
-            min-height: 100px;
-            outline: none;
-            transition: border-color 0.2s;
-            margin-bottom: 16px;
-        }
-        .feedback-textarea:focus { border-color: var(--theme); }
-
-        /* Submit Button */
-        .btn-submit {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 16px 20px;
-            background: var(--gray-900);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            border: none;
-            box-shadow: var(--shadow-btn);
-            transition: background 0.18s, transform 0.12s;
-            min-height: 56px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .btn-submit:active { background: #000; transform: scale(0.98); }
-        .btn-submit i { font-size: 18px; }
-
-        /* =============================================
-           LOADING & SUCCESS OVERLAYS
-        ============================================= */
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.96);
-            backdrop-filter: blur(4px);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 32px;
-            z-index: 20;
-        }
-        .overlay.show { display: flex; }
-
-        .spinner { font-size: 36px; margin-bottom: 14px; animation: spin 0.9s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .success-icon-wrap {
-            width: 80px; height: 80px;
-            background: #DCFCE7;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px;
-        }
-        .success-icon-wrap i { font-size: 36px; color: var(--green); }
-        .success-title { font-size: 22px; font-weight: 800; color: var(--gray-900); margin-bottom: 10px; }
-        .success-msg { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
-    </style>
+/* ── FOOTER ── */
+.footer{text-align:center;font-size:11px;color:#9CA3AF;padding:12px 0 16px;border-top:1px solid #F3F4F6}
+</style>
 </head>
 <body>
+<div class="card">
 
-<div class="card" id="main-card">
-    
-    <!-- HEADER -->
-    <div class="header" id="header">
-        <button class="lang-toggle" onclick="toggleLanguage()">A/अ</button>
-        <div class="biz-avatar">
-            <i class="fas fa-store"></i>
-        </div>
-        <div class="biz-name" id="biz-name">Our Business</div>
-        <div class="biz-subtitle" id="t-subtitle">We value your feedback</div>
+  <!-- HEADER -->
+  <div class="hdr" id="hdr">
+    <button class="lang-btn" onclick="switchLang()">A/अ</button>
+    <div class="biz-ico" id="biz-ico">🏪</div>
+    <div class="biz-name" id="biz-name">Our Business</div>
+    <div class="biz-sub" id="t-sub">We value your feedback</div>
+  </div>
+
+  <!-- STARS -->
+  <div class="star-sec">
+    <div class="star-q" id="t-rq">How was your experience today?</div>
+    <div class="stars" id="stars">
+      <i class="fas fa-star star" data-v="1"></i>
+      <i class="fas fa-star star" data-v="2"></i>
+      <i class="fas fa-star star" data-v="3"></i>
+      <i class="fas fa-star star" data-v="4"></i>
+      <i class="fas fa-star star" data-v="5"></i>
+    </div>
+    <div class="rate-word" id="rw"></div>
+  </div>
+
+  <div class="divider" id="dvd" style="display:none"></div>
+
+  <!-- POSITIVE SECTION (4-5 stars) -->
+  <div class="section hidden" id="pos-sec">
+    <div class="info pos">
+      <div class="info-ico">🎉</div>
+      <div>
+        <div class="info-title" id="t-aw">Awesome! Thank you!</div>
+        <div class="info-sub" id="t-sup">Share a review on Google so others can find us.</div>
+      </div>
+    </div>
+    <div class="sec-lbl" id="t-ql">QUICK COPY — TAP TO COPY:</div>
+    <div class="chips" id="chips-en"></div>
+    <div class="chips hidden" id="chips-hi"></div>
+    <div class="toast" id="toast"></div>
+    <button class="btn btn-g" id="btn-g" onclick="goGoogle()">
+      <i class="fab fa-google"></i>
+      <span id="t-gp">Post on Google</span>
+    </button>
+  </div>
+
+  <!-- NEGATIVE SECTION (1-3 stars) -->
+  <div class="section hidden" id="neg-sec" style="position:relative">
+
+    <div class="ov" id="ov-load">
+      <i class="fas fa-circle-notch spin" style="color:var(--theme)"></i>
+      <div style="font-size:15px;font-weight:600;color:#374151" id="t-snd">Sending...</div>
     </div>
 
-    <!-- RATING SECTION -->
-    <div class="rating-section">
-        <div class="rate-label" id="t-rate-us">How was your experience today?</div>
-        
-        <div class="stars-wrap" id="stars-wrap">
-            <i class="fas fa-star star" data-val="1"></i>
-            <i class="fas fa-star star" data-val="2"></i>
-            <i class="fas fa-star star" data-val="3"></i>
-            <i class="fas fa-star star" data-val="4"></i>
-            <i class="fas fa-star star" data-val="5"></i>
-        </div>
-
-        <div class="rating-word" id="rating-word"></div>
+    <div class="ov" id="ov-ok">
+      <div class="ok-ico"><i class="fas fa-check"></i></div>
+      <div class="ov-title" id="t-okt">Feedback Sent!</div>
+      <div class="ov-msg" id="t-okm">Thank you! Our team will review it privately.</div>
     </div>
 
-    <div class="section-divider" id="section-divider" style="display:none;"></div>
-
-    <!-- POSITIVE SECTION (4-5 Stars) -->
-    <div class="action-section" id="positive-section">
-
-        <div class="positive-header">
-            <div class="positive-icon">🎉</div>
-            <div>
-                <div class="positive-title" id="t-awesome">Awesome!</div>
-                <div class="positive-sub" id="t-support-us">Please support us by sharing your review on Google.</div>
-            </div>
-        </div>
-
-        <div class="chips-label" id="t-quick-copy">Quick Copy (Tap to copy):</div>
-
-        <!-- English Chips -->
-        <div class="chips-wrap" id="chips-en">
-            <button class="chip" onclick="copyChip(this)">
-                <span class="chip-emoji">🌟</span>
-                <span>Great service and very friendly staff!</span>
-                <i class="fas fa-check chip-check"></i>
-            </button>
-            <button class="chip" onclick="copyChip(this)">
-                <span class="chip-emoji">✨</span>
-                <span>Highly recommended! Will definitely visit again.</span>
-                <i class="fas fa-check chip-check"></i>
-            </button>
-            <button class="chip" onclick="copyChip(this)">
-                <span class="chip-emoji">💎</span>
-                <span>Excellent quality and great value for money.</span>
-                <i class="fas fa-check chip-check"></i>
-            </button>
-        </div>
-
-        <!-- Hindi Chips -->
-        <div class="chips-wrap" id="chips-hi" style="display:none;">
-            <button class="chip" onclick="copyChip(this)">
-                <span class="chip-emoji">🌟</span>
-                <span>Bahut achhi service aur friendly staff!</span>
-                <i class="fas fa-check chip-check"></i>
-            </button>
-            <button class="chip" onclick="copyChip(this)">
-                <span class="chip-emoji">✨</span>
-                <span>Zaroor aayein, bahut accha anubhav raha.</span>
-                <i class="fas fa-check chip-check"></i>
-            </button>
-            <button class="chip" onclick="copyChip(this)">
-                <span class="chip-emoji">💎</span>
-                <span>Paisa vasool aur excellent quality!</span>
-                <i class="fas fa-check chip-check"></i>
-            </button>
-        </div>
-
-        <div class="copy-toast" id="copy-toast">✅ Text copied! Now tap Post on Google</div>
-
-        <button class="btn-google" onclick="redirectToGoogle()" id="btn-google">
-            <i class="fab fa-google"></i>
-            <span id="t-post-google">Post on Google</span>
-        </button>
+    <div class="info neg">
+      <div class="info-ico">🙏</div>
+      <div>
+        <div class="info-title" id="t-sry">We're sorry to hear that.</div>
+        <div class="info-sub" id="t-imp">Help us improve — tell us what went wrong.</div>
+      </div>
     </div>
 
-    <!-- NEGATIVE SECTION (1-3 Stars) -->
-    <div class="action-section" id="negative-section" style="position:relative;">
-        
-        <!-- Loading Overlay -->
-        <div class="overlay" id="loading-overlay">
-            <i class="fas fa-circle-notch spinner" style="color: var(--theme);"></i>
-            <div style="font-size: 15px; font-weight: 600; color: var(--gray-700);" id="t-sending">Sending your feedback...</div>
-        </div>
-
-        <!-- Success Overlay -->
-        <div class="overlay" id="success-overlay">
-            <div class="success-icon-wrap">
-                <i class="fas fa-check"></i>
-            </div>
-            <div class="success-title" id="t-success-title">Feedback Sent!</div>
-            <div class="success-msg" id="t-success-msg">Thank you! Your feedback has been received. Our team will review it shortly.</div>
-        </div>
-
-        <div class="negative-header">
-            <div class="negative-icon">🙏</div>
-            <div>
-                <div class="negative-title" id="t-sorry">We're sorry to hear that.</div>
-                <div class="negative-sub" id="t-help-improve">Help us improve by sharing what went wrong.</div>
-            </div>
-        </div>
-
-        <div class="tags-label" id="t-issues-label">SELECT YOUR ISSUE:</div>
-        <div class="tags-wrap" id="neg-tags">
-            <button class="tag" onclick="toggleTag(this)" data-en="Slow Service" data-hi="Late Service">Slow Service</button>
-            <button class="tag" onclick="toggleTag(this)" data-en="Staff Behavior" data-hi="Staff Behavior">Staff Behavior</button>
-            <button class="tag" onclick="toggleTag(this)" data-en="High Pricing" data-hi="Mehnga Hai">High Pricing</button>
-            <button class="tag" onclick="toggleTag(this)" data-en="Hygiene Issue" data-hi="Safai Problem">Hygiene Issue</button>
-            <button class="tag" onclick="toggleTag(this)" data-en="Other" data-hi="Aur Kuch">Other</button>
-        </div>
-
-        <textarea
-            class="feedback-textarea"
-            id="feedback-text"
-            rows="3"
-            placeholder="Tell us more details (optional)..."
-        ></textarea>
-
-        <button class="btn-submit" onclick="submitFeedback()">
-            <i class="fas fa-paper-plane"></i>
-            <span id="t-send-feedback">Send Feedback Privately</span>
-        </button>
-
+    <div class="sec-lbl" id="t-il">SELECT ISSUE (OPTIONAL):</div>
+    <div class="tags" id="tag-row">
+      <button class="tag" onclick="toggleTag(this)" data-en="Slow Service" data-hi="Late Service">Slow Service</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="Staff Behavior" data-hi="Staff Behavior">Staff Behavior</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="High Pricing" data-hi="Mehnga Hai">High Pricing</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="Hygiene Issue" data-hi="Safai Problem">Hygiene Issue</button>
+      <button class="tag" onclick="toggleTag(this)" data-en="Other" data-hi="Aur Kuch">Other</button>
     </div>
 
+    <div class="field">
+      <label id="t-nl">Your Name (Optional)</label>
+      <input type="text" id="f-name" placeholder="e.g. Rahul Sharma">
+    </div>
+    <div class="field">
+      <label id="t-pl">Your Phone (Optional)</label>
+      <input type="tel" id="f-phone" placeholder="e.g. 9876543210">
+    </div>
+    <div class="field">
+      <label id="t-dl">Your Feedback</label>
+      <textarea id="f-text" rows="3" placeholder="Tell us what happened..."></textarea>
+    </div>
+
+    <button class="btn btn-s" onclick="submitFeedback()">
+      <i class="fas fa-paper-plane"></i>
+      <span id="t-sb">Send Feedback Privately</span>
+    </button>
+  </div>
+
+  <div class="footer">Powered by <strong>Review Shield</strong></div>
 </div>
 
-<!-- SCRIPTS -->
 <script>
-    // ─── Translations ────────────────────────────────
-    const dict = {
-        en: {
-            subtitle: "We value your feedback",
-            rateUs: "How was your experience today?",
-            rateWords: ["", "Terrible 😞", "Poor 😕", "Okay 😐", "Good 😊", "Excellent 🤩"],
-            awesome: "Awesome! Thank you!",
-            supportUs: "Please share a review on Google so others can find us.",
-            quickCopy: "QUICK COPY (TAP TO COPY):",
-            postGoogle: "Post on Google",
-            sorry: "We're sorry to hear that.",
-            helpImprove: "Help us improve by sharing what went wrong.",
-            issuesLabel: "SELECT YOUR ISSUE:",
-            placeholder: "Tell us more details (optional)...",
-            sendFeedback: "Send Feedback Privately",
-            sending: "Sending your feedback...",
-            successTitle: "Feedback Sent!",
-            successMsg: "Thank you! Your feedback has been received. Our team will review it shortly.",
-            copied: "✅ Text copied! Now tap Post on Google"
-        },
-        hi: {
-            subtitle: "हम आपके फीडबैक की कद्र करते हैं",
-            rateUs: "आज का आपका अनुभव कैसा रहा?",
-            rateWords: ["", "बहुत खराब 😞", "खराब 😕", "ठीक-ठाक 😐", "अच्छा 😊", "शानदार 🤩"],
-            awesome: "बहुत बढ़िया! धन्यवाद!",
-            supportUs: "कृपया Google पर रिव्यू दें ताकि और लोग हमें ढूंढ सकें।",
-            quickCopy: "क्विक कॉपी (टैप करें):",
-            postGoogle: "Google पर पोस्ट करें",
-            sorry: "हमें खेद है।",
-            helpImprove: "क्या गलत हुआ? हमें बताइए ताकि हम सुधार कर सकें।",
-            issuesLabel: "समस्या चुनें:",
-            placeholder: "और विवरण बताएं (वैकल्पिक)...",
-            sendFeedback: "फीडबैक भेजें",
-            sending: "भेजा जा रहा है...",
-            successTitle: "फीडबैक भेज दिया गया!",
-            successMsg: "आपके कीमती फीडबैक के लिए धन्यवाद। हमारी टीम इसे जल्द देखेगी।",
-            copied: "✅ कॉपी हो गया! अब Google पर टैप करें"
-        }
+// ── TRANSLATIONS ──────────────────────────────────────────────────
+var T = {
+  en:{
+    sub:"We value your feedback",
+    rq:"How was your experience today?",
+    words:["","Terrible 😞","Poor 😕","Okay 😐","Good 😊","Excellent 🤩"],
+    aw:"Awesome! Thank you!",
+    sup:"Share a review on Google so others can find us.",
+    ql:"QUICK COPY — TAP TO COPY:",
+    gp:"Post on Google",
+    toast:"✅ Copied! Now tap Post on Google",
+    sry:"We're sorry to hear that.",
+    imp:"Help us improve — tell us what went wrong.",
+    il:"SELECT ISSUE (OPTIONAL):",
+    nl:"Your Name (Optional)",
+    npl:"e.g. Rahul Sharma",
+    pl:"Your Phone (Optional)",
+    ppl:"e.g. 9876543210",
+    dl:"Your Feedback",
+    dpl:"Tell us what happened...",
+    sb:"Send Feedback Privately",
+    snd:"Sending...",
+    okt:"Feedback Sent!",
+    okm:"Thank you! Our team will review it privately."
+  },
+  hi:{
+    sub:"हम आपके फीडबैक की कद्र करते हैं",
+    rq:"आज का आपका अनुभव कैसा रहा?",
+    words:["","बहुत खराब 😞","खराब 😕","ठीक-थाक 😐","अच्छा 😊","शानदार 🤩"],
+    aw:"बहुत बढ़िया! धन्यवाद!",
+    sup:"कृपया Google पर रिव्यू दें ताकि और लोग हमें ढूंढ सकें।",
+    ql:"क्विक कॉपी — टैप करें:",
+    gp:"Google पर पोस्ट करें",
+    toast:"✅ कॉपी हुआ! अब Google पर पोस्ट करें",
+    sry:"हमें खेद है।",
+    imp:"क्या गलत हुआ? हमें बताइए।",
+    il:"समस्या चुनें (वैकल्पिक):",
+    nl:"आपका नाम (वैकल्पिक)",
+    npl:"जैसे: राहुल शर्मा",
+    pl:"आपका फोन (वैकल्पिक)",
+    ppl:"जैसे: 9876543210",
+    dl:"आपकी प्रतिक्रिया",
+    dpl:"क्या हुआ, बताइए...",
+    sb:"फीडबैक भेजें",
+    snd:"भेजा जा रहा है...",
+    okt:"फीडबैक भेज दिया गया!",
+    okm:"आपके फीडबैक के लिए धन्यवाद। हमारी टीम जल्द इसे देखेगी।"
+  }
+};
+
+// ── CATEGORY CHIPS ────────────────────────────────────────────────
+var CHIPS = {
+  restaurant:{
+    en:["Food was delicious and service was excellent!","Great ambiance, will definitely visit again.","Best restaurant in the area, highly recommended!"],
+    hi:["खाना बहुत स्वादिष्ट था और सर्विस शानदार थी!","माहौल बहुत अच्छा था, ज़रूर वापस आएंगे।","इलाके का सबसे अच्छा रेस्टोरेंट, पूरी तरह अनुशंसित!"]
+  },
+  salon:{
+    en:["Amazing service and very professional staff!","Best experience ever, loved the results!","Hygienic, skilled and friendly professionals!"],
+    hi:["बेहतरीन सेवा और बहुत ही पेशेवर स्टाफ!","अब तक का सबसे अच्छा अनुभव, परिणाम पसंद आए!","साफ-सुथरा, कुशल और मित्रवत पेशेवर!"]
+  },
+  clinic:{
+    en:["Doctor was thorough and caring!","Quick appointment, excellent treatment!","Highly recommend this clinic!"],
+    hi:["डॉक्टर बहुत अच्छे और caring थे!","जल्दी appointment, excellent treatment!","इस clinic को recommend करूंगा!"]
+  },
+  gym:{
+    en:["Great equipment and friendly trainers!","Clean gym with excellent coaching!","Best gym in town, worth it!"],
+    hi:["बढ़िया equipment और friendly trainers!","साफ़ gym, excellent coaching!","शहर का सबसे अच्छा gym!"]
+  },
+  travel:{
+    en:["Amazing travel experience, zero hassle!","Very professional and trustworthy agency!","Best travel agency, will book again!"],
+    hi:["शानदार travel experience!","बहुत professional और भरोसेमंद agency!","सबसे अच्छी travel agency!"]
+  },
+  default:{
+    en:["Great service and very friendly staff!","Highly recommended! Will visit again.","Excellent quality and value for money."],
+    hi:["बहुत अच्छी service और friendly staff!","ज़रूर आएं, शानदार अनुभव हुआ।","पैसा वसूल और excellent quality!"]
+  }
+};
+var ICONS = ["🌟","✨","💎"];
+
+// ── STATE ─────────────────────────────────────────────────────────
+var lang   = 'en';
+var rating = 0;
+var tags   = [];
+
+// ── URL PARAMS ────────────────────────────────────────────────────
+var P   = new URLSearchParams(window.location.search);
+var BIZ = P.get('n') || "Our Business";
+var ICO = P.get('i') || "🏪";
+var CAT = P.get('cat') || "default";
+var GL  = decodeURIComponent(P.get('g') || "#");
+var MODE= P.get('m') || "wa";
+var CON = decodeURIComponent(P.get('c') || "");
+var THM = decodeURIComponent(P.get('t') || "#3B82F6");
+
+// ── INIT ──────────────────────────────────────────────────────────
+document.getElementById('biz-name').innerText = BIZ;
+document.getElementById('biz-ico').innerText  = ICO;
+document.title = BIZ + " – Rate Us";
+applyTheme(THM);
+buildChips();
+initStars();
+
+function applyTheme(hex) {
+  document.documentElement.style.setProperty('--theme', hex);
+  document.getElementById('hdr').style.background = hex;
+  document.getElementById('btn-g').style.background = hex;
+}
+
+function buildChips() {
+  var cat  = CHIPS[CAT] ? CAT : 'default';
+  ['en','hi'].forEach(function(l) {
+    var wrap = document.getElementById('chips-'+l);
+    wrap.innerHTML = '';
+    CHIPS[cat][l].forEach(function(txt, i) {
+      var btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.innerHTML =
+        '<span class="chip-ico">'+ICONS[i]+'</span>' +
+        '<span class="chip-txt">'+txt+'</span>' +
+        '<i class="fas fa-check chip-chk"></i>';
+      btn.addEventListener('click', function(){ copyChip(btn, txt); });
+      wrap.appendChild(btn);
+    });
+  });
+}
+
+// ── STARS ─────────────────────────────────────────────────────────
+function initStars() {
+  var stars = document.querySelectorAll('.star');
+  stars.forEach(function(s) {
+    // Hover (desktop)
+    s.addEventListener('mouseenter', function() {
+      if(rating === 0) litStars(parseInt(s.getAttribute('data-v')));
+    });
+    s.addEventListener('mouseleave', function() {
+      litStars(rating);
+    });
+    // Click
+    s.addEventListener('click', function() {
+      rating = parseInt(s.getAttribute('data-v'));
+      litStars(rating);
+      showWord(rating);
+      showSection(rating);
+    });
+  });
+}
+
+function litStars(n) {
+  document.querySelectorAll('.star').forEach(function(s, i) {
+    if(i < n) { s.classList.add('lit'); }
+    else       { s.classList.remove('lit'); }
+  });
+}
+
+function showWord(n) {
+  var el = document.getElementById('rw');
+  el.innerText = T[lang].words[n];
+  el.classList.add('active');
+}
+
+function showSection(n) {
+  var posEl = document.getElementById('pos-sec');
+  var negEl = document.getElementById('neg-sec');
+  var dvd   = document.getElementById('dvd');
+
+  // Show divider
+  dvd.style.display = 'block';
+
+  // Hide both first
+  posEl.classList.add('hidden');
+  negEl.classList.add('hidden');
+
+  // Show the right one
+  if(n >= 4) {
+    posEl.classList.remove('hidden');
+  } else {
+    negEl.classList.remove('hidden');
+  }
+
+  // Scroll to divider
+  setTimeout(function() {
+    dvd.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 80);
+}
+
+// ── COPY CHIP ─────────────────────────────────────────────────────
+function copyChip(btn, text) {
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('done'); });
+  btn.classList.add('done');
+
+  // Try clipboard API, fallback for older browsers
+  try {
+    if(navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(function(){ fallbackCopy(text); });
+    } else {
+      fallbackCopy(text);
+    }
+  } catch(e) {
+    fallbackCopy(text);
+  }
+
+  var t = document.getElementById('toast');
+  t.innerText = T[lang].toast;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+
+// ── GOOGLE ────────────────────────────────────────────────────────
+function goGoogle() {
+  if(GL && GL !== '#') {
+    window.open(GL, '_blank');
+  } else {
+    alert('Google review link not configured. Please contact support.');
+  }
+}
+
+// ── TAGS ─────────────────────────────────────────────────────────
+function toggleTag(btn) {
+  var v = btn.getAttribute('data-en');
+  var idx = tags.indexOf(v);
+  if(idx > -1) {
+    tags.splice(idx, 1);
+    btn.classList.remove('on');
+  } else {
+    tags.push(v);
+    btn.classList.add('on');
+  }
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────
+function submitFeedback() {
+  if(!CON) { alert('Owner contact not configured.'); return; }
+
+  var name  = document.getElementById('f-name').value.trim();
+  var phone = document.getElementById('f-phone').value.trim();
+  var text  = document.getElementById('f-text').value.trim();
+  var issues= tags.length ? tags.join(', ') : 'Not specified';
+
+  if(MODE === 'wa') {
+    var msg = '⚠️ *New Complaint Alert*\n'
+            + '🏪 *Business:* ' + BIZ + '\n'
+            + '⭐ *Rating:* ' + rating + ' Star(s)\n'
+            + '❗ *Issues:* ' + issues + '\n';
+    if(name)  msg += '👤 *Customer:* ' + name + '\n';
+    if(phone) msg += '📞 *Phone:* ' + phone + '\n';
+    if(text)  msg += '💬 *Message:* ' + text + '\n';
+    msg += '\n_Sent via Review Shield_';
+
+    // Clean number
+    var num = CON.replace(/[\s\-\(\)\+]/g, '');
+    if(num.length === 10) num = '91' + num;
+
+    window.location.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
+
+  } else {
+    var ovLoad = document.getElementById('ov-load');
+    document.getElementById('t-snd').innerText = T[lang].snd;
+    ovLoad.classList.add('show');
+
+    var payload = {
+      Business: BIZ,
+      Rating:   rating + ' Star(s)',
+      Issues:   issues,
+      Customer: name  || 'Anonymous',
+      Phone:    phone || 'Not provided',
+      Message:  text  || 'No comment',
+      _subject: '⚠️ Complaint: ' + BIZ + ' (' + rating + '★)',
+      _template:'box',
+      _captcha: 'false'
     };
 
-    // ─── State ───────────────────────────────────────
-    let lang = 'en';
-    let selectedRating = 0;
-    let selectedTags = [];
-
-    // ─── URL Params ──────────────────────────────────
-    const params = new URLSearchParams(window.location.search);
-    const bizName      = params.get('n') || "Our Business";
-    const gLink        = decodeURIComponent(params.get('g') || "#");
-    const deliveryMode = params.get('m') || "wa";
-    const contactInfo  = params.get('c') || "";
-    const themeColor   = decodeURIComponent(params.get('t') || "#3B82F6");
-
-    // ─── Init ────────────────────────────────────────
-    document.getElementById('biz-name').innerText = bizName;
-    document.title = bizName + " – Rate Us";
-
-    // Apply theme color everywhere
-    document.documentElement.style.setProperty('--theme', themeColor);
-    document.getElementById('header').style.background = themeColor;
-
-    // Compute darker shade for active states
-    document.documentElement.style.setProperty('--theme-dark', shadeColor(themeColor, -20));
-    document.documentElement.style.setProperty('--theme-light', shadeColor(themeColor, 85));
-
-    function shadeColor(color, percent) {
-        let num = parseInt(color.replace('#',''), 16);
-        let amt = Math.round(2.55 * percent);
-        let R = Math.min(255, Math.max(0, (num >> 16) + amt));
-        let G = Math.min(255, Math.max(0, (num >> 8 & 0x00FF) + amt));
-        let B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
-        return '#' + (0x1000000 + R*0x10000 + G*0x100 + B).toString(16).slice(1);
-    }
-
-    // Set icon color on header logo
-    document.querySelector('.biz-avatar i').style.color = themeColor;
-    document.querySelector('.btn-google').style.background = themeColor;
-
-    // ─── Stars ───────────────────────────────────────
-    const starEls = document.querySelectorAll('.star');
-
-    starEls.forEach(star => {
-        // Mouse hover (desktop)
-        star.addEventListener('mouseenter', () => {
-            if(selectedRating === 0) highlightStars(parseInt(star.dataset.val));
-        });
-        star.addEventListener('mouseleave', () => {
-            if(selectedRating === 0) highlightStars(0);
-            else highlightStars(selectedRating);
-        });
-
-        // Click / Tap
-        star.addEventListener('click', () => {
-            selectedRating = parseInt(star.dataset.val);
-            highlightStars(selectedRating);
-            updateRatingWord(selectedRating);
-            showSection(selectedRating);
-        });
+    fetch('https://formsubmit.co/ajax/' + encodeURIComponent(CON), {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.json(); })
+    .then(function() {
+      ovLoad.classList.remove('show');
+      document.getElementById('t-okt').innerText = T[lang].okt;
+      document.getElementById('t-okm').innerText = T[lang].okm;
+      document.getElementById('ov-ok').classList.add('show');
+    })
+    .catch(function() {
+      ovLoad.classList.remove('show');
+      alert('Failed to send. Please try again.');
     });
+  }
+}
 
-    function highlightStars(val) {
-        starEls.forEach((s, i) => {
-            if(i < val) {
-                s.style.color = '#FBBF24';
-            } else {
-                s.style.color = '#E5E7EB';
-            }
-        });
-    }
+// ── LANGUAGE ──────────────────────────────────────────────────────
+function switchLang() {
+  lang = lang === 'en' ? 'hi' : 'en';
+  applyLang();
+}
 
-    function updateRatingWord(val) {
-        const el = document.getElementById('rating-word');
-        el.innerText = dict[lang].rateWords[val];
-        el.classList.add('visible');
-    }
+function applyLang() {
+  var d = T[lang];
+  function s(id, val){ var e=document.getElementById(id); if(e) e.innerText=val; }
+  function p(id, val){ var e=document.getElementById(id); if(e) e.placeholder=val; }
 
-    function showSection(val) {
-        const posEl = document.getElementById('positive-section');
-        const negEl = document.getElementById('negative-section');
-        const divider = document.getElementById('section-divider');
+  s('t-sub', d.sub); s('t-rq', d.rq);
+  s('t-aw', d.aw);   s('t-sup', d.sup);
+  s('t-ql', d.ql);   s('t-gp', d.gp);
+  s('t-sry', d.sry); s('t-imp', d.imp);
+  s('t-il', d.il);   s('t-nl', d.nl);
+  s('t-pl', d.pl);   s('t-dl', d.dl);
+  s('t-sb', d.sb);   s('t-snd', d.snd);
+  s('t-okt', d.okt); s('t-okm', d.okm);
+  p('f-name', d.npl); p('f-phone', d.ppl); p('f-text', d.dpl);
 
-        divider.style.display = 'block';
-        posEl.classList.remove('visible');
-        negEl.classList.remove('visible');
-        posEl.style.display = 'none';
-        negEl.style.display = 'none';
+  if(rating > 0) showWord(rating);
 
-        // Small delay for re-animation
-        setTimeout(() => {
-            if(val >= 4) {
-                posEl.style.display = 'block';
-                posEl.classList.add('visible');
-            } else {
-                negEl.style.display = 'block';
-                negEl.classList.add('visible');
-            }
+  document.querySelectorAll('.tag').forEach(function(t) {
+    t.innerText = t.getAttribute('data-' + lang);
+  });
 
-            // Scroll section into view smoothly
-            setTimeout(() => {
-                divider.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 80);
-        }, 30);
-    }
-
-    // ─── Copy Chip ───────────────────────────────────
-    function copyChip(btn) {
-        // Deselect all chips
-        document.querySelectorAll('.chip').forEach(c => c.classList.remove('copied'));
-
-        // Select this
-        btn.classList.add('copied');
-
-        // Get text (skip emoji span)
-        const textSpan = btn.querySelectorAll('span')[0];
-        const text = textSpan ? textSpan.innerText : btn.innerText;
-
-        navigator.clipboard.writeText(text).catch(() => {
-            // Fallback for older mobile browsers
-            const ta = document.createElement('textarea');
-            ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-            document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-            document.body.removeChild(ta);
-        });
-
-        const toast = document.getElementById('copy-toast');
-        toast.innerText = dict[lang].copied;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    // ─── Google Redirect ─────────────────────────────
-    function redirectToGoogle() {
-        if(gLink && gLink !== "#") {
-            window.open(gLink, '_blank');
-        } else {
-            alert("Google review link is not configured yet.");
-        }
-    }
-
-    // ─── Tags ────────────────────────────────────────
-    function toggleTag(btn) {
-        const val = btn.getAttribute('data-en');
-        if(selectedTags.includes(val)) {
-            selectedTags = selectedTags.filter(t => t !== val);
-            btn.classList.remove('selected');
-        } else {
-            selectedTags.push(val);
-            btn.classList.add('selected');
-        }
-    }
-
-    // ─── Submit Feedback ─────────────────────────────
-    function submitFeedback() {
-        if(!contactInfo) {
-            alert("Owner contact info not configured. Please check the QR link.");
-            return;
-        }
-
-        const feedbackText = document.getElementById('feedback-text').value.trim();
-        const issuesText   = selectedTags.length > 0 ? selectedTags.join(', ') : 'None';
-
-        if(deliveryMode === 'wa') {
-            // WhatsApp mode
-            let msg = `⚠️ *Negative Feedback Alert*\n`;
-            msg += `🏪 Business: ${bizName}\n`;
-            msg += `⭐ Rating: ${selectedRating} Star(s)\n`;
-            msg += `❗ Issue(s): ${issuesText}\n`;
-            if(feedbackText) msg += `💬 Message: ${feedbackText}`;
-
-            const waUrl = `https://wa.me/91${contactInfo.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
-            window.location.href = waUrl;
-
-        } else if(deliveryMode === 'em') {
-            // Email mode — formsubmit.co AJAX
-            document.getElementById('loading-overlay').classList.add('show');
-            document.getElementById('t-sending').innerText = dict[lang].sending;
-
-            const payload = {
-                Business:   bizName,
-                Rating:     `${selectedRating} Star(s)`,
-                Issues:     issuesText,
-                Feedback:   feedbackText || 'No comments',
-                _subject:   `⚠️ Negative Feedback: ${bizName} (${selectedRating}★)`,
-                _template:  'box'
-            };
-
-            fetch(`https://formsubmit.co/ajax/${encodeURIComponent(contactInfo)}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(r => r.json())
-            .then(() => {
-                document.getElementById('loading-overlay').classList.remove('show');
-                document.getElementById('success-title-text').innerText  = dict[lang].successTitle;
-                document.getElementById('success-msg-text').innerText    = dict[lang].successMsg;
-                document.getElementById('success-overlay').classList.add('show');
-            })
-            .catch(() => {
-                document.getElementById('loading-overlay').classList.remove('show');
-                alert("Error sending feedback. Please try again.");
-            });
-        }
-    }
-
-    // ─── Language Toggle ─────────────────────────────
-    function toggleLanguage() {
-        lang = lang === 'en' ? 'hi' : 'en';
-        applyLanguage();
-    }
-
-    function applyLanguage() {
-        const d = dict[lang];
-        document.getElementById('t-subtitle').innerText     = d.subtitle;
-        document.getElementById('t-rate-us').innerText      = d.rateUs;
-        document.getElementById('t-awesome').innerText      = d.awesome;
-        document.getElementById('t-support-us').innerText   = d.supportUs;
-        document.getElementById('t-quick-copy').innerText   = d.quickCopy;
-        document.getElementById('t-post-google').innerText  = d.postGoogle;
-        document.getElementById('t-sorry').innerText        = d.sorry;
-        document.getElementById('t-help-improve').innerText = d.helpImprove;
-        document.getElementById('t-issues-label').innerText = d.issuesLabel;
-        document.getElementById('feedback-text').placeholder = d.placeholder;
-        document.getElementById('t-send-feedback').innerText = d.sendFeedback;
-        document.getElementById('t-sending').innerText      = d.sending;
-
-        if(selectedRating > 0) updateRatingWord(selectedRating);
-
-        // Tags
-        document.querySelectorAll('.tag').forEach(tag => {
-            tag.innerText = tag.getAttribute(`data-${lang}`);
-        });
-
-        // Chips
-        if(lang === 'en') {
-            document.getElementById('chips-en').style.display = 'flex';
-            document.getElementById('chips-hi').style.display = 'none';
-        } else {
-            document.getElementById('chips-en').style.display = 'none';
-            document.getElementById('chips-hi').style.display = 'flex';
-        }
-    }
+  if(lang === 'en') {
+    document.getElementById('chips-en').classList.remove('hidden');
+    document.getElementById('chips-hi').classList.add('hidden');
+  } else {
+    document.getElementById('chips-hi').classList.remove('hidden');
+    document.getElementById('chips-en').classList.add('hidden');
+  }
+}
 </script>
 </body>
 </html>
